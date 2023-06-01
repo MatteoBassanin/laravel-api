@@ -55,17 +55,17 @@ class ProjectController extends Controller
         $validated_data = $request->validated();
 
         $validated_data['slug'] = Str::slug($request->title, '-');
+        
+        if($request->hasFile('image')){
+            $path = Storage::put('cover',$request->image);
+            $validated_data['image'] = $path;
+        }
 
         $newProject = Project::create($validated_data);
 
 
         if ($request->has('tecnologies')) {
             $newProject->tecnologies()->attach($request->tecnologies);
-        }
-
-        if($request->hasFile('image')){
-           $path = Storage::put('cover',$request->image);
-           $validated_data['image'] = $path;
         }
 
 
